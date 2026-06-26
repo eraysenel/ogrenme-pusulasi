@@ -6,47 +6,52 @@
 <title>Öğrenme Pusulası - Kendi yolunu keşfet</title>
 <style>
   :root{--ink:#1c2237;--muted:#667092;--line:#e7eaf5;--card:#fff;--bg:#f6f8fe;
-    --p1:#5b6ef5;--p2:#22b3a4;--p3:#7c3aed;--warm:#f59e0b;--em:#16a34a}
+    --p1:#5b6ef5;--p2:#22b3a4;--p3:#7c3aed;--warm:#f59e0b}
+  body.dark{--ink:#e9edf8;--muted:#9aa6c4;--line:#2a3350;--card:#141b2e;--bg:#0a0f1e}
   *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);line-height:1.6;background:var(--bg)}
+  body{margin:0;font-family:system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);line-height:1.6;background:var(--bg);transition:background .2s,color .2s}
   .wrap{max-width:820px;margin:0 auto;padding:0 18px}
-  .hero{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;text-align:center;padding:46px 0 40px}
-  .hero h1{font-size:32px;margin:8px 0 6px}
-  .hero p{opacity:.95;font-size:15px;margin:0 auto;max-width:520px}
+  .hero{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;text-align:center;padding:42px 0 36px}
+  .hero h1{font-size:32px;margin:8px 0 6px}.hero p{opacity:.95;font-size:15px;margin:0 auto;max-width:520px}
   .kick{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 13px;font-size:12px;font-weight:700}
+  .toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;
+    background:var(--card);border:1px solid var(--line);border-radius:0 0 14px 14px;padding:9px 12px;margin-bottom:14px;box-shadow:0 4px 14px rgba(30,40,80,.06)}
+  .tbtn{background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer}
+  .tbtn:hover{border-color:var(--p1)}
+  .ttime{font-weight:800;color:var(--p1);font-variant-numeric:tabular-nums;min-width:54px;text-align:center}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 6px 22px rgba(40,50,90,.05)}
-  h2{font-size:18px;margin:0 0 4px}
-  h3{font-size:15px;margin:14px 0 6px;color:var(--p1)}
+  h2{font-size:18px;margin:0 0 4px}h3{font-size:15px;margin:14px 0 6px;color:var(--p1)}
   .lead{color:var(--muted);font-size:14px;margin:0 0 8px}
   label{display:block;font-size:13px;font-weight:600;margin:11px 0 5px}
-  input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+  input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:var(--bg);color:var(--ink)}
   textarea{min-height:54px;resize:vertical}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .btn{border:0;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;font-size:16px;width:100%;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2))}
   .btn:hover{filter:brightness(1.04)}.btn:disabled{opacity:.6;cursor:wait}
-  .ghost{background:#eef1fb;color:var(--ink);border:1px solid var(--line);width:auto;font-size:13px;padding:10px 14px}
+  .ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line);width:auto;font-size:13px;padding:10px 14px}
   details summary{cursor:pointer;font-weight:700;color:var(--p1);font-size:13.5px}
-  .note{background:#fff7ed;border:1px solid #fde6c4;border-radius:10px;padding:10px 12px;font-size:12.5px;color:#92591a;margin-top:8px}
+  .note{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink);margin-top:8px}
   .loading{text-align:center;color:var(--muted);padding:30px}
   .spin{display:inline-block;width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--p1);border-radius:50%;animation:r 1s linear infinite}
   @keyframes r{to{transform:rotate(360deg)}}
-  .hello{background:linear-gradient(135deg,#eef1ff,#e6fbf6);border:1px solid var(--line);font-size:15px}
+  .hello{background:rgba(91,110,245,.08);border:1px solid var(--line);font-size:15px}
   .modtag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;border-radius:999px;padding:3px 10px;margin-bottom:6px}
-  .m1{background:#eef1ff;color:var(--p1)}.m2{background:#e6fbf6;color:#0d8b7e}.m3{background:#f3ecff;color:var(--p3)}
-  .req{background:#fee2e2;color:#b91c1c;font-size:10px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
-  .ilke{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;background:#fbfcff}
-  .ilke b{color:var(--p1)}
-  .altin{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:12px 14px;font-weight:700;color:#92591a;margin-top:10px}
-  .pill{display:inline-block;background:#eef1ff;color:var(--p1);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:700;margin:0 6px 6px 0}
-  .kapi{background:#f0fdf9;border:1px solid #bff0e6;border-radius:12px;padding:14px;margin-top:6px}
-  .q{border-top:1px dashed var(--line);padding:10px 0}.q:first-of-type{border-top:0}
-  .q .qs{font-weight:700;font-size:14px}
-  .q .qa{margin-top:6px;font-size:14px;color:#0d8b7e;background:#e6fbf6;border-radius:8px;padding:8px 10px}
-  .q button{background:#eef1fb;border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;width:auto;color:var(--ink)}
+  .m1{background:rgba(91,110,245,.14);color:var(--p1)}.m2{background:rgba(34,179,164,.16);color:var(--p2)}.m3{background:rgba(124,58,237,.14);color:var(--p3)}
+  .req{background:rgba(220,38,38,.15);color:#e15a5a;font-size:10px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+  .ilke{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;background:rgba(91,110,245,.06)}.ilke b{color:var(--p1)}
+  .altin{background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.4);border-radius:12px;padding:12px 14px;font-weight:700;color:var(--ink);margin-top:10px}
+  .pill{display:inline-block;background:rgba(91,110,245,.14);color:var(--p1);border-radius:999px;padding:4px 11px;font-size:13px;font-weight:700;margin:0 6px 6px 0}
+  .kapi{background:rgba(34,179,164,.09);border:1px solid rgba(34,179,164,.3);border-radius:12px;padding:14px;margin-top:6px}
+  .q{border-top:1px dashed var(--line);padding:10px 0}.q:first-of-type{border-top:0}.q .qs{font-weight:700;font-size:14px}
+  .q .qa{margin-top:6px;font-size:14px;color:var(--ink);background:rgba(34,179,164,.14);border-radius:8px;padding:8px 10px}
+  .q button{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;width:auto;color:var(--ink)}
   .step{display:flex;gap:10px;margin:8px 0}.step .n{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--p1);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
-  .giz{background:#eef6ff;border:1px solid #cfe3ff;border-radius:12px;padding:12px 14px;color:#1e4e8c;font-size:14px;margin-top:8px}
-  .priv{color:#8a93b0;font-size:12px;text-align:center;padding:14px 0 26px}
+  .giz{background:rgba(91,110,245,.1);border:1px solid rgba(91,110,245,.3);border-radius:12px;padding:12px 14px;color:var(--ink);font-size:14px;margin-top:8px}
+  .gorev{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.35);border-radius:14px;padding:16px;text-align:center;font-size:15px}
+  .gorev b{color:var(--p3)}
+  .priv{color:var(--muted);font-size:12px;text-align:center;padding:14px 0 26px}
   @media(max-width:560px){.row{grid-template-columns:1fr}.hero h1{font-size:26px}}
+  @media print{.toolbar,.btn,.ghost,.q button,#setup details,.priv{display:none!important}.card{box-shadow:none;break-inside:avoid}body{background:#fff}}
 </style>
 </head>
 <body>
@@ -55,6 +60,14 @@
     <p>Sevmediğin dersi sevdirir, sevdiğin şeyin üstünden seni büyütür. Önce yapay zekayı doğru kullanmayı öğrenirsin. Yolun sana özel.</p></div></div>
 
   <div class="wrap">
+    <div class="toolbar">
+      <button class="tbtn" id="themeBtn" onclick="toggleTheme()">🌙 Koyu mod</button>
+      <button class="tbtn" id="timerBtn" onclick="toggleTimer()">▶️ Oturumu başlat</button>
+      <span class="ttime" id="timeOut">00:00</span>
+      <button class="tbtn" id="speakBtn" onclick="speak()">🔊 Dinle</button>
+      <button class="tbtn" onclick="window.print()">🖨️ Yazdır</button>
+    </div>
+
     <div id="setup">
       <div class="card">
         <details id="setBox">
@@ -92,6 +105,18 @@
   S=Object.assign(S,L('op_settings',{})); R=L('op_result',null);
   function getKey(){return localStorage.getItem('op_key')||''}
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function val(id){return (document.getElementById(id).value||'').trim();}
+
+  // theme
+  function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('op_theme',document.body.classList.contains('dark')?'dark':'light');themeBtn();}
+  function themeBtn(){var d=document.body.classList.contains('dark');document.getElementById('themeBtn').textContent=d?'☀️ Açık mod':'🌙 Koyu mod';}
+  // session timer
+  var sec=0,tmr=null,broke=false;
+  function fmtT(s){var m=Math.floor(s/60),ss=s%60;return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  function toggleTimer(){var b=document.getElementById('timerBtn');if(tmr){clearInterval(tmr);tmr=null;b.textContent='▶️ Devam et';}else{tmr=setInterval(function(){sec++;document.getElementById('timeOut').textContent=fmtT(sec);if(sec===1500&&!broke){broke=true;alert('25 dakika oldu - kısa bir mola iyi gelir 🌿 Kalkıp biraz su iç, gözlerini dinlendir.');}},1000);b.textContent='⏸️ Duraklat';}}
+  // tts
+  function speak(){var b=document.getElementById('speakBtn');if(!('speechSynthesis' in window)){alert('Tarayıcın sesli okumayı desteklemiyor.');return;}var sp=window.speechSynthesis;if(sp.speaking){sp.cancel();b.textContent='🔊 Dinle';return;}var el=document.getElementById('out');var txt=(el&&el.innerText&&el.innerText.trim())?el.innerText:'Önce pusulanı hazırla, sonra dinle.';try{var u=new SpeechSynthesisUtterance(txt.slice(0,4500));u.lang='tr-TR';u.rate=1;u.onend=function(){b.textContent='🔊 Dinle';};sp.speak(u);b.textContent='⏹️ Durdur';}catch(e){alert('Sesli okuma başlatılamadı.');}}
+
   function saveKey(){var k=document.getElementById('key').value.trim();S.model=document.getElementById('model').value;localStorage.setItem('op_settings',JSON.stringify(S));if(k)localStorage.setItem('op_key',k);document.getElementById('key').value='';keyUI();}
   function clearKey(){localStorage.removeItem('op_key');keyUI();}
   function keyUI(){var st=document.getElementById('keyState');st.style.display='block';st.innerHTML=getKey()?('✅ Anahtar kayıtlı (•••'+getKey().slice(-4)+'). <button class="ghost btn" style="padding:3px 8px;font-size:12px" onclick="clearKey()">Sil</button>'):'Anahtar girilmedi.';}
@@ -102,13 +127,11 @@
     if(!res.ok){var t=await res.text();throw new Error('OpenAI '+res.status+' - '+t.slice(0,160));}
     return JSON.parse((await res.json()).choices[0].message.content);
   }
-
   function msgs(p){
-    var sys="Sen sıcak, cesaret veren ve gerçekçi bir öğrenme rehberisin. Kullanıcının yaşına ve durumuna UYGUN bir dille (küçükse daha sade ve oyunsu, yetişkinse daha pratik) Türkçe yanıt ver. Asla küçümseme, her zaman cesaretlendir. SADECE şu JSON ile yanıt ver:\n{\"selamlama\":string,\"temel_ai\":{\"giris\":string,\"ilkeler\":[{\"baslik\":string,\"aciklama\":string}],\"altin_kural\":string},\"pusula\":{\"guclu_yonler\":[string],\"ilgi_haritasi\":string,\"kucuk_kapi\":{\"ders\":string,\"anlatim\":string,\"ornek\":string,\"mini_sorular\":[{\"soru\":string,\"cevap\":string}],\"seviye_notu\":string},\"kisisel_yol\":[string],\"gizlilik_ipucu\":string},\"kisisel_gelisim\":{\"enerji\":string,\"farkindalik\":string,\"ozdeger\":string}}\nKurallar: temel_ai.ilkeler arasında MUTLAKA şunlar olsun: 'Yapay zeka hata yapabilir - cevaplarını her zaman kontrol et, körü körüne güvenme'; 'Senin en güçlü yönün hayal gücün - yapay zeka bir araç, fikir ve hayal senden gelir'; 'Kişisel bilgilerini (ad, adres, okul, şifre) yapay zekaya verme'; 'Yapay zeka senin yerine düşünmez/öğrenmez, sana yardımcı olur'. 4-5 ilke. pusula.kucuk_kapi: sevmediği dersi onun sevdiği şeyle bağ kurarak küçük, eğlenceli, cesaret veren bir temelle anlat; mini_sorular 2-3 basit soru ve net cevap; seviye_notu nazik ve teşvik edici. kisisel_yol: sevdiği şeyin üstünden gelişme için 3 somut adım. kisisel_gelisim: enerji/farkındalık/özdeğer için yaşına uygun, kısa, uygulanabilir 1-2 cümle.";
+    var sys="Sen sıcak, cesaret veren ve gerçekçi bir öğrenme rehberisin. Kullanıcının yaşına ve durumuna UYGUN bir dille (küçükse daha sade ve oyunsu, yetişkinse daha pratik) Türkçe yanıt ver. Asla küçümseme, her zaman cesaretlendir. SADECE şu JSON ile yanıt ver:\n{\"selamlama\":string,\"temel_ai\":{\"giris\":string,\"ilkeler\":[{\"baslik\":string,\"aciklama\":string}],\"altin_kural\":string},\"pusula\":{\"guclu_yonler\":[string],\"ilgi_haritasi\":string,\"kucuk_kapi\":{\"ders\":string,\"anlatim\":string,\"ornek\":string,\"mini_sorular\":[{\"soru\":string,\"cevap\":string}],\"seviye_notu\":string},\"kisisel_yol\":[string],\"gizlilik_ipucu\":string},\"gunun_gorevi\":string,\"kisisel_gelisim\":{\"enerji\":string,\"farkindalik\":string,\"ozdeger\":string}}\nKurallar: temel_ai.ilkeler arasında MUTLAKA şunlar olsun: 'Yapay zeka hata yapabilir - cevaplarını her zaman kontrol et, körü körüne güvenme'; 'Senin en güçlü yönün hayal gücün - yapay zeka bir araç, fikir ve hayal senden gelir'; 'Kişisel bilgilerini (ad, adres, okul, şifre) yapay zekaya verme'; 'Yapay zeka senin yerine düşünmez/öğrenmez, sana yardımcı olur'. 4-5 ilke. pusula.kucuk_kapi: sevmediği dersi sevdiği şeyle bağ kurarak küçük, eğlenceli, cesaret veren bir temelle anlat; mini_sorular 2-3 basit soru+net cevap; seviye_notu nazik. kisisel_yol: sevdiği şeyin üstünden gelişme için 3 somut adım. gunun_gorevi: bugün yapabileceği, sevdiği şeyle bağlantılı, 10-15 dakikalık küçük somut bir görev. kisisel_gelisim: enerji/farkındalık/özdeğer için yaşına uygun, kısa, uygulanabilir 1-2 cümle.";
     var u="Profil → Ad: "+(p.ad||'(belirtmedi)')+", Yaş: "+(p.yas||'(belirtmedi)')+", Durum: "+p.durum+", Amaç: "+(p.amac||'(belirtmedi)')+", İlgi alanları: "+(p.ilgi||'(belirtmedi)')+", Sevmediği ders+neden: "+(p.sevmedigin||'(belirtmedi)')+". Bu kişiye özel bir öğrenme pusulası hazırla.";
     return [{role:'system',content:sys},{role:'user',content:u}];
   }
-
   async function hazirla(){
     var p={ad:val('ad'),yas:val('yas'),durum:val('durum'),amac:val('amac'),ilgi:val('ilgi'),sevmedigin:val('sevmedigin')};
     var btn=document.getElementById('goBtn');btn.disabled=true;btn.textContent='✨ Pusulan hazırlanıyor...';
@@ -117,7 +140,6 @@
     catch(e){if(e.message!=='no-key')document.getElementById('out').innerHTML='<div class="card note">Hata: '+esc(e.message)+'</div>';else document.getElementById('out').innerHTML='';}
     btn.disabled=false;btn.textContent='✨ Pusulamı hazırla';
   }
-  function val(id){return (document.getElementById(id).value||'').trim();}
   function toggleA(b){var a=b.nextElementSibling;if(a){a.style.display=a.style.display==='none'?'block':'none';b.textContent=a.style.display==='none'?'Cevabı gör':'Gizle';}}
 
   function render(){
@@ -125,12 +147,9 @@
     var r=R.r,t=r.temel_ai||{},pu=r.pusula||{},kk=pu.kucuk_kapi||{},kg=r.kisisel_gelisim||{};
     var h='';
     h+='<div class="card hello">👋 '+esc(r.selamlama||'Hoş geldin!')+'</div>';
-    // M1
     h+='<div class="card"><span class="modtag m1">Modül 1</span><span class="req">ZORUNLU</span><h2>🤖 Yapay Zekayı Doğru Kullan</h2><p class="lead">'+esc(t.giris||'')+'</p>';
     (t.ilkeler||[]).forEach(function(i){h+='<div class="ilke"><b>'+esc(i.baslik||'')+'</b><div>'+esc(i.aciklama||'')+'</div></div>';});
-    if(t.altin_kural)h+='<div class="altin">⭐ '+esc(t.altin_kural)+'</div>';
-    h+='</div>';
-    // M2
+    if(t.altin_kural)h+='<div class="altin">⭐ '+esc(t.altin_kural)+'</div>';h+='</div>';
     h+='<div class="card"><span class="modtag m2">Modül 2</span><h2>🧭 Öğrenme Pusulam</h2>';
     if((pu.guclu_yonler||[]).length){h+='<h3>Güçlü yönlerin</h3><div>'+(pu.guclu_yonler||[]).map(function(g){return '<span class="pill">'+esc(g)+'</span>'}).join('')+'</div>';}
     if(pu.ilgi_haritasi)h+='<h3>İlgi haritan</h3><p>'+esc(pu.ilgi_haritasi)+'</p>';
@@ -138,18 +157,18 @@
       (kk.mini_sorular||[]).forEach(function(q){h+='<div class="q"><div class="qs">❓ '+esc(q.soru||'')+'</div><button onclick="toggleA(this)">Cevabı gör</button><div class="qa" style="display:none">'+esc(q.cevap||'')+'</div></div>';});
       if(kk.seviye_notu)h+='<p style="margin-top:10px"><b>Seviyene dair:</b> '+esc(kk.seviye_notu)+'</p>';h+='</div>';}
     if((pu.kisisel_yol||[]).length){h+='<h3>🌱 Sana özel yol</h3>';(pu.kisisel_yol||[]).forEach(function(s,i){h+='<div class="step"><div class="n">'+(i+1)+'</div><div>'+esc(s)+'</div></div>';});}
-    if(pu.gizlilik_ipucu)h+='<div class="giz">🔒 <b>Gizlilik:</b> '+esc(pu.gizlilik_ipucu)+'</div>';
-    h+='</div>';
-    // M3
+    if(pu.gizlilik_ipucu)h+='<div class="giz">🔒 <b>Gizlilik:</b> '+esc(pu.gizlilik_ipucu)+'</div>';h+='</div>';
+    if(r.gunun_gorevi)h+='<div class="card gorev">🎯 <b>Bugünün küçük görevi:</b><br>'+esc(r.gunun_gorevi)+'</div>';
     h+='<div class="card"><span class="modtag m3">Modül 3</span><h2>🌟 Kişisel Gelişim</h2>';
     if(kg.enerji)h+='<h3>⚡ Enerjini doğru kullan</h3><p>'+esc(kg.enerji)+'</p>';
     if(kg.farkindalik)h+='<h3>🧠 Farkındalık</h3><p>'+esc(kg.farkindalik)+'</p>';
     if(kg.ozdeger)h+='<h3>💛 Özdeğer</h3><p>'+esc(kg.ozdeger)+'</p>';
-    h+='<div class="note">Bu bölüm adım adım büyüyecek - daha fazla konu yakında eklenecek.</div></div>';
-    h+='<div class="card" style="background:none;border:0;box-shadow:none;padding:0;text-align:center"><button class="ghost btn" onclick="hazirla()">🔄 Yeniden hazırla</button> <button class="ghost btn" onclick="document.getElementById(\'setup\').scrollIntoView({behavior:\'smooth\'})">✏️ Profili değiştir</button></div>';
+    h+='<div class="note">Bu bölüm adım adım büyüyecek - daha fazla konu yakında.</div></div>';
+    h+='<div style="text-align:center;margin:14px 0"><button class="ghost btn" onclick="hazirla()">🔄 Yeniden hazırla</button> <button class="ghost btn" onclick="document.getElementById(\'setup\').scrollIntoView({behavior:\'smooth\'})">✏️ Profili değiştir</button></div>';
     document.getElementById('out').innerHTML=h;
   }
-  (function(){document.getElementById('model').value=S.model;if(getKey())keyUI();
+  (function(){if(localStorage.getItem('op_theme')==='dark')document.body.classList.add('dark');themeBtn();
+    document.getElementById('model').value=S.model;if(getKey())keyUI();
     if(R&&R.p){['ad','yas','durum','amac','ilgi','sevmedigin'].forEach(function(k){if(R.p[k]!==undefined)document.getElementById(k).value=R.p[k];});render();}})();
 </script>
 </body>
