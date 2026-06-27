@@ -22,6 +22,7 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 6px 22px rgba(40,50,90,.05)}
   h2{font-size:18px;margin:0 0 4px}h3{font-size:15px;margin:14px 0 6px;color:var(--p1)}
   .lead{color:var(--muted);font-size:14px;margin:0 0 8px}
+  .free{background:rgba(34,179,164,.1);border:1px solid rgba(34,179,164,.3);border-radius:12px;padding:10px 14px;font-size:13.5px;color:var(--ink);text-align:center}
   label{display:block;font-size:13px;font-weight:600;margin:11px 0 5px}
   input,select,textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:var(--bg);color:var(--ink)}
   textarea{min-height:54px;resize:vertical}
@@ -29,7 +30,6 @@
   .btn{border:0;border-radius:12px;padding:14px;font-weight:800;cursor:pointer;font-size:16px;width:100%;color:#fff;background:linear-gradient(135deg,var(--p1),var(--p2))}
   .btn:hover{filter:brightness(1.04)}.btn:disabled{opacity:.6;cursor:wait}
   .ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line);width:auto;font-size:13px;padding:10px 14px}
-  details summary{cursor:pointer;font-weight:700;color:var(--p1);font-size:13.5px}
   .note{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--ink);margin-top:8px}
   .loading{text-align:center;color:var(--muted);padding:30px}
   .spin{display:inline-block;width:26px;height:26px;border:3px solid var(--line);border-top-color:var(--p1);border-radius:50%;animation:r 1s linear infinite}
@@ -47,11 +47,10 @@
   .q button{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;margin-top:6px;width:auto;color:var(--ink)}
   .step{display:flex;gap:10px;margin:8px 0}.step .n{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--p1);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
   .giz{background:rgba(91,110,245,.1);border:1px solid rgba(91,110,245,.3);border-radius:12px;padding:12px 14px;color:var(--ink);font-size:14px;margin-top:8px}
-  .gorev{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.35);border-radius:14px;padding:16px;text-align:center;font-size:15px}
-  .gorev b{color:var(--p3)}
+  .gorev{background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.35);border-radius:14px;padding:16px;text-align:center;font-size:15px}.gorev b{color:var(--p3)}
   .priv{color:var(--muted);font-size:12px;text-align:center;padding:14px 0 26px}
   @media(max-width:560px){.row{grid-template-columns:1fr}.hero h1{font-size:26px}}
-  @media print{.toolbar,.btn,.ghost,.q button,#setup details,.priv{display:none!important}.card{box-shadow:none;break-inside:avoid}body{background:#fff}}
+  @media print{.toolbar,.btn,.ghost,.q button,.priv{display:none!important}.card{box-shadow:none;break-inside:avoid}body{background:#fff}}
 </style>
 </head>
 <body>
@@ -69,16 +68,7 @@
     </div>
 
     <div id="setup">
-      <div class="card">
-        <details id="setBox">
-          <summary>⚙️ Ayarlar - OpenAI anahtarı (motoru açmak için bir kez)</summary>
-          <label>OpenAI API anahtarın</label>
-          <input id="key" type="password" placeholder="sk-..." autocomplete="off">
-          <div class="row" style="margin-top:8px"><select id="model"><option value="gpt-4o-mini">gpt-4o-mini (ucuz, hızlı)</option><option value="gpt-4o">gpt-4o (daha detaylı)</option></select><button class="btn" onclick="saveKey()">Kaydet</button></div>
-          <div class="note">🔒 Anahtarın yalnızca bu cihazda saklanır, koda yazılmaz, paylaşılmaz. İçeriği senin tarayıcın doğrudan OpenAI'den hazırlatır.</div>
-          <div id="keyState" class="note" style="display:none"></div>
-        </details>
-      </div>
+      <div class="card free">✅ <b>Ücretsiz ve hazır</b> - anahtar girmene gerek yok. Bilgilerin yalnızca senin cihazında kalır.</div>
       <div class="card">
         <h2>👋 Seni biraz tanıyalım</h2>
         <p class="lead">Pusulan sana özel hazırlanacak. (Gerçek adını yazmak zorunda değilsin.)</p>
@@ -100,32 +90,26 @@
   <div class="priv">🔒 Bilgilerin yalnızca bu cihazda. Yapay zeka bir yardımcıdır, öğretmenin yerini almaz. · Bir İyilik İçin Yapay Zeka projesi · © Eray Şenel</div>
 
 <script>
-  var S={model:'gpt-4o-mini'}; var R=null;
+  var PROXY="https://iyilikicinai.doksandokuz3032.workers.dev/";
+  var R=null;
   function L(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
-  S=Object.assign(S,L('op_settings',{})); R=L('op_result',null);
-  function getKey(){return localStorage.getItem('op_key')||''}
+  R=L('op_result',null);
   function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function val(id){return (document.getElementById(id).value||'').trim();}
 
-  // theme
   function toggleTheme(){document.body.classList.toggle('dark');localStorage.setItem('op_theme',document.body.classList.contains('dark')?'dark':'light');themeBtn();}
   function themeBtn(){var d=document.body.classList.contains('dark');document.getElementById('themeBtn').textContent=d?'☀️ Açık mod':'🌙 Koyu mod';}
-  // session timer
   var sec=0,tmr=null,broke=false;
   function fmtT(s){var m=Math.floor(s/60),ss=s%60;return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
   function toggleTimer(){var b=document.getElementById('timerBtn');if(tmr){clearInterval(tmr);tmr=null;b.textContent='▶️ Devam et';}else{tmr=setInterval(function(){sec++;document.getElementById('timeOut').textContent=fmtT(sec);if(sec===1500&&!broke){broke=true;alert('25 dakika oldu - kısa bir mola iyi gelir 🌿 Kalkıp biraz su iç, gözlerini dinlendir.');}},1000);b.textContent='⏸️ Duraklat';}}
-  // tts
   function speak(){var b=document.getElementById('speakBtn');if(!('speechSynthesis' in window)){alert('Tarayıcın sesli okumayı desteklemiyor.');return;}var sp=window.speechSynthesis;if(sp.speaking){sp.cancel();b.textContent='🔊 Dinle';return;}var el=document.getElementById('out');var txt=(el&&el.innerText&&el.innerText.trim())?el.innerText:'Önce pusulanı hazırla, sonra dinle.';try{var u=new SpeechSynthesisUtterance(txt.slice(0,4500));u.lang='tr-TR';u.rate=1;u.onend=function(){b.textContent='🔊 Dinle';};sp.speak(u);b.textContent='⏹️ Durdur';}catch(e){alert('Sesli okuma başlatılamadı.');}}
 
-  function saveKey(){var k=document.getElementById('key').value.trim();S.model=document.getElementById('model').value;localStorage.setItem('op_settings',JSON.stringify(S));if(k)localStorage.setItem('op_key',k);document.getElementById('key').value='';keyUI();}
-  function clearKey(){localStorage.removeItem('op_key');keyUI();}
-  function keyUI(){var st=document.getElementById('keyState');st.style.display='block';st.innerHTML=getKey()?('✅ Anahtar kayıtlı (•••'+getKey().slice(-4)+'). <button class="ghost btn" style="padding:3px 8px;font-size:12px" onclick="clearKey()">Sil</button>'):'Anahtar girilmedi.';}
-
   async function callAI(messages){
-    var key=getKey(); if(!key){alert('Önce ⚙️ Ayarlar\'dan OpenAI anahtarını gir.');document.getElementById('setBox').open=true;throw new Error('no-key');}
-    var res=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:S.model||'gpt-4o-mini',temperature:0.8,response_format:{type:'json_object'},messages:messages})});
-    if(!res.ok){var t=await res.text();throw new Error('OpenAI '+res.status+' - '+t.slice(0,160));}
-    return JSON.parse((await res.json()).choices[0].message.content);
+    var res=await fetch(PROXY,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:messages,temperature:0.8,response_format:{type:"json_object"}})});
+    if(!res.ok){var t=await res.text();throw new Error("Sunucu "+res.status+(t?(" - "+t.slice(0,150)):""));}
+    var data=await res.json();
+    if(!data.choices||!data.choices[0])throw new Error("Beklenmedik yanıt: "+JSON.stringify(data).slice(0,150));
+    return JSON.parse(data.choices[0].message.content);
   }
   function msgs(p){
     var sys="Sen sıcak, cesaret veren ve gerçekçi bir öğrenme rehberisin. Kullanıcının yaşına ve durumuna UYGUN bir dille (küçükse daha sade ve oyunsu, yetişkinse daha pratik) Türkçe yanıt ver. Asla küçümseme, her zaman cesaretlendir. SADECE şu JSON ile yanıt ver:\n{\"selamlama\":string,\"temel_ai\":{\"giris\":string,\"ilkeler\":[{\"baslik\":string,\"aciklama\":string}],\"altin_kural\":string},\"pusula\":{\"guclu_yonler\":[string],\"ilgi_haritasi\":string,\"kucuk_kapi\":{\"ders\":string,\"anlatim\":string,\"ornek\":string,\"mini_sorular\":[{\"soru\":string,\"cevap\":string}],\"seviye_notu\":string},\"kisisel_yol\":[string],\"gizlilik_ipucu\":string},\"gunun_gorevi\":string,\"kisisel_gelisim\":{\"enerji\":string,\"farkindalik\":string,\"ozdeger\":string}}\nKurallar: temel_ai.ilkeler arasında MUTLAKA şunlar olsun: 'Yapay zeka hata yapabilir - cevaplarını her zaman kontrol et, körü körüne güvenme'; 'Senin en güçlü yönün hayal gücün - yapay zeka bir araç, fikir ve hayal senden gelir'; 'Kişisel bilgilerini (ad, adres, okul, şifre) yapay zekaya verme'; 'Yapay zeka senin yerine düşünmez/öğrenmez, sana yardımcı olur'. 4-5 ilke. pusula.kucuk_kapi: sevmediği dersi sevdiği şeyle bağ kurarak küçük, eğlenceli, cesaret veren bir temelle anlat; mini_sorular 2-3 basit soru+net cevap; seviye_notu nazik. kisisel_yol: sevdiği şeyin üstünden gelişme için 3 somut adım. gunun_gorevi: bugün yapabileceği, sevdiği şeyle bağlantılı, 10-15 dakikalık küçük somut bir görev. kisisel_gelisim: enerji/farkındalık/özdeğer için yaşına uygun, kısa, uygulanabilir 1-2 cümle.";
@@ -137,7 +121,7 @@
     var btn=document.getElementById('goBtn');btn.disabled=true;btn.textContent='✨ Pusulan hazırlanıyor...';
     document.getElementById('out').innerHTML='<div class="card"><div class="loading"><div class="spin"></div><div style="margin-top:10px">Sana özel yolun çiziliyor...</div></div></div>';
     try{var r=await callAI(msgs(p));R={r:r,p:p};localStorage.setItem('op_result',JSON.stringify(R));render();window.scrollTo({top:0,behavior:'smooth'});}
-    catch(e){if(e.message!=='no-key')document.getElementById('out').innerHTML='<div class="card note">Hata: '+esc(e.message)+'</div>';else document.getElementById('out').innerHTML='';}
+    catch(e){document.getElementById('out').innerHTML='<div class="card note">Bir sorun oldu: '+esc(e.message)+'<br>Birkaç saniye sonra tekrar dene.</div>';}
     btn.disabled=false;btn.textContent='✨ Pusulamı hazırla';
   }
   function toggleA(b){var a=b.nextElementSibling;if(a){a.style.display=a.style.display==='none'?'block':'none';b.textContent=a.style.display==='none'?'Cevabı gör':'Gizle';}}
@@ -168,7 +152,6 @@
     document.getElementById('out').innerHTML=h;
   }
   (function(){if(localStorage.getItem('op_theme')==='dark')document.body.classList.add('dark');themeBtn();
-    document.getElementById('model').value=S.model;if(getKey())keyUI();
     if(R&&R.p){['ad','yas','durum','amac','ilgi','sevmedigin'].forEach(function(k){if(R.p[k]!==undefined)document.getElementById(k).value=R.p[k];});render();}})();
 </script>
 </body>
