@@ -93,6 +93,22 @@
 
 <script>
   const PROXY="https://iyilikicinai.doksandokuz3032.workers.dev/";
+  const SITEKEY="0x4AAAAAADsB1yi04fQ4PyVU";
+  let _ses=null;try{_ses=JSON.parse(localStorage.getItem('cf_ses')||'null');}catch(e){}
+  let _tsWid=null,_tsQ=[];
+  window.cfTsOnload=function(){try{_tsWid=turnstile.render('#ts-box',{sitekey:SITEKEY,size:'compact',callback:function(t){var r=_tsQ.shift();if(r)r(t);},'error-callback':function(){var r=_tsQ.shift();if(r)r('');}});}catch(e){}};
+  function _tsToken(){return new Promise(function(res){if(typeof turnstile==='undefined'||_tsWid===null){res('');return;}_tsQ.push(res);try{turnstile.reset(_tsWid);}catch(e){res('');}});}
+  function _sesOk(){return _ses&&_ses.token&&_ses.exp&&Date.now()<_ses.exp-60000;}
+  async function ensureSession(){
+    if(_sesOk())return _ses.token;
+    var tt=await _tsToken();
+    if(!tt)throw new Error('Bot doğrulaması yüklenemedi - sol alttaki kutuyu işaretle ve tekrar dene.');
+    var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'auth',turnstileToken:tt})});
+    var d=await r.json();
+    if(!d.sessionToken)throw new Error(d.error||'oturum alınamadı');
+    _ses={token:d.sessionToken,exp:d.exp};try{localStorage.setItem('cf_ses',JSON.stringify(_ses));}catch(e){}
+    return _ses.token;
+  }
   const CMDS=['ipucu','örnek','daha kolay','test et','motive et','özetle'];
   let history=[], profile=null, isWaiting=false;
 
@@ -107,7 +123,9 @@ KOMUTLAR (öğrenci yazarsa): ipucu / örnek / daha kolay / test et / motive et 
 
   async function callProxy(msgs,sys){
     const oai=[{role:'system',content:sys},...msgs.map(m=>({role:m.role,content:m.content}))];
-    const res=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:oai,temperature:0.75})});
+    async function go(){var st=await ensureSession();return fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:oai,temperature:0.75,sessionToken:st})});}
+    let res=await go();
+    if(res.status===401){_ses=null;localStorage.removeItem('cf_ses');res=await go();}
     const data=await res.json();
     if(data.error)throw new Error(data.error.message||JSON.stringify(data.error));
     if(!data.choices||!data.choices[0])throw new Error('Beklenmedik yanıt');
@@ -159,5 +177,7 @@ KOMUTLAR (öğrenci yazarsa): ipucu / örnek / daha kolay / test et / motive et 
 
   (function(){try{var s=JSON.parse(localStorage.getItem('op_session')||'null');if(s&&s.profile&&s.history&&s.history.length){profile=s.profile;history=s.history;enterChat();history.forEach(function(m,i){if(i===0&&m.role==='user')return;addBub(m.role==='assistant'?'ai':'user',m.content);});}}catch(e){}})();
 </script>
+<div id="ts-box" style="position:fixed;bottom:10px;left:10px;z-index:99"></div>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=cfTsOnload" async defer></script>
 </body>
 </html>
