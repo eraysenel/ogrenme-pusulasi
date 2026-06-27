@@ -96,8 +96,9 @@
   const SITEKEY="0x4AAAAAADsB1yi04fQ4PyVU";
   let _ses=null;try{_ses=JSON.parse(localStorage.getItem('cf_ses')||'null');}catch(e){}
   let _tsWid=null,_tsQ=[];
-  window.cfTsOnload=function(){try{_tsWid=turnstile.render('#ts-box',{sitekey:SITEKEY,size:'compact',callback:function(t){var r=_tsQ.shift();if(r)r(t);},'error-callback':function(){var r=_tsQ.shift();if(r)r('');}});}catch(e){}};
-  function _tsToken(){return new Promise(function(res){if(typeof turnstile==='undefined'||_tsWid===null){res('');return;}_tsQ.push(res);try{turnstile.reset(_tsWid);}catch(e){res('');}});}
+  function _tsShow(b){var e=document.getElementById('ts-box');if(e)e.style.display=b?'block':'none';}
+  window.cfTsOnload=function(){try{_tsWid=turnstile.render('#ts-box',{sitekey:SITEKEY,size:'compact',callback:function(t){var r=_tsQ.shift();if(r){r(t);}else if(_sesOk()){_tsShow(false);}},'error-callback':function(){var r=_tsQ.shift();if(r)r('');}});if(_sesOk())_tsShow(false);}catch(e){}};
+  function _tsToken(){return new Promise(function(res){if(typeof turnstile==='undefined'||_tsWid===null){res('');return;}_tsShow(true);_tsQ.push(res);try{turnstile.reset(_tsWid);}catch(e){res('');}});}
   function _sesOk(){return _ses&&_ses.token&&_ses.exp&&Date.now()<_ses.exp-60000;}
   async function ensureSession(){
     if(_sesOk())return _ses.token;
@@ -107,6 +108,7 @@
     var d=await r.json();
     if(!d.sessionToken)throw new Error(d.error||'oturum alınamadı');
     _ses={token:d.sessionToken,exp:d.exp};try{localStorage.setItem('cf_ses',JSON.stringify(_ses));}catch(e){}
+    _tsShow(false);
     return _ses.token;
   }
   const CMDS=['ipucu','örnek','daha kolay','test et','motive et','özetle'];
